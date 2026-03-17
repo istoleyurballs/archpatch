@@ -1,14 +1,14 @@
 mod backup;
 mod patch;
 use std::{
-    path::PathBuf,
+    path::{Path, PathBuf},
     process::{Command, Stdio},
 };
 
 pub use backup::*;
 pub use patch::*;
 
-pub fn read_original_file_from_archive(pkg: &alpm::Package, path: &PathBuf) -> String {
+pub fn read_original_file_from_archive(pkg: &alpm::Package, path: &Path) -> String {
     assert!(path.is_absolute());
 
     let package_archive = PathBuf::from("/var/cache/pacman/pkg").join(format!(

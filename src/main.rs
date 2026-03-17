@@ -1,4 +1,8 @@
-use std::{io::Write, path::PathBuf, process::Command, str::FromStr};
+use std::{
+    io::Write,
+    path::{Path, PathBuf},
+    process::Command,
+};
 
 use alpm::Alpm;
 use archpatch::{BackupFile, PatchError, PatchFile};
@@ -106,7 +110,7 @@ fn do_report(args: &Args, skip_pacreport: bool) {
             continue;
         };
 
-        if &real_md5 == &backup.original_md5 {
+        if real_md5 == backup.original_md5 {
             // Same file (probably).
             continue;
         }
@@ -260,7 +264,7 @@ fn do_report(args: &Args, skip_pacreport: bool) {
     }
 }
 
-fn do_diff(_args: &Args, target: &PathBuf, with_context: bool) {
+fn do_diff(_args: &Args, target: &Path, with_context: bool) {
     let config = pacmanconf::Config::new().unwrap();
     let alpm = Alpm::new(config.root_dir, config.db_path).unwrap();
     let db = alpm.localdb();

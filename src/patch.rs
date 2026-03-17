@@ -40,7 +40,7 @@ impl PatchFile {
 
         Ok(Self {
             path,
-            of: PathBuf::new().join("/").join(of),
+            of: PathBuf::from("/").join(of),
             patch,
         })
     }
