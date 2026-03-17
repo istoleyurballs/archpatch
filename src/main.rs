@@ -7,6 +7,7 @@ use std::{
 use alpm::Alpm;
 use archpatch::{BackupFile, PatchError, PatchFile};
 use clap::Parser;
+use tempfile::NamedTempFile;
 
 #[derive(clap::Parser)]
 pub struct Args {
@@ -261,7 +262,7 @@ fn do_diff(_args: &Args, target: &PathBuf, with_context: bool) {
 
     // Check for changes.
 
-    let mut temp = tempfile::NamedTempFile::new().expect("Failed to create temp file");
+    let mut temp = NamedTempFile::new().expect("Failed to create temp file");
     write!(
         temp,
         "{}",
