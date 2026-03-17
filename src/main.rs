@@ -1,8 +1,4 @@
-use std::{
-    io::Write,
-    path::PathBuf,
-    process::{Command, exit},
-};
+use std::{io::Write, path::PathBuf, process::Command, str::FromStr};
 
 use alpm::Alpm;
 use archpatch::{BackupFile, PatchError, PatchFile};
@@ -220,8 +216,34 @@ fn do_report(args: &Args, skip_pacreport: bool) {
         .unwrap()
         + 3;
 
-    for patch in patch_files {
+    for patch in &patch_files {
         print!("  {:width$} - ", patch.path.display(), width = pad_to);
+
+        // Check if duplicated.
+
+        if patch_files
+            .iter()
+            .any(|other| other.of == patch.of && other.path != patch.path)
+        {
+            print!("DUPLICATED PATCH TARGET - ");
+        }
+
+        // Check if name outside of convention.
+
+        let expected_target = PathBuf::from("/").join(
+            patch
+                .path
+                .file_name()
+                .unwrap()
+                .to_string_lossy()
+                .replace("-", "/")
+                .strip_suffix(".patch")
+                .unwrap(),
+        );
+
+        if expected_target != patch.of {
+            print!("BADLY NAMED - ");
+        }
 
         // Try to apply the patch to check its status.
 
