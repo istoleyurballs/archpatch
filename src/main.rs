@@ -269,6 +269,11 @@ fn do_diff(_args: &Args, target: &Path, with_context: bool) {
     let alpm = Alpm::new(config.root_dir, config.db_path).unwrap();
     let db = alpm.localdb();
 
+    if !target.exists() {
+        eprintln!("Target file doesn't exists !");
+        std::process::exit(1);
+    }
+
     let target = target
         .canonicalize()
         .expect("Failed to canonicalize target path");
@@ -282,7 +287,7 @@ fn do_diff(_args: &Args, target: &Path, with_context: bool) {
         .iter()
         .find_map(|p| p.files().contains(prefixless_target.as_bytes()).map(|_| p))
     else {
-        eprintln!("Your target file isn't owned by any package");
+        eprintln!("Target file isn't owned by any package");
         std::process::exit(1);
     };
 

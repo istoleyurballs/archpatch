@@ -6,6 +6,11 @@ use std::{
 use itertools::Itertools;
 
 pub fn iter_patch_files(patch_patch: &Path) -> impl Iterator<Item = PatchFile> {
+    if !patch_patch.exists() {
+        eprintln!("Patch directory doesn't exists !");
+        std::process::exit(1);
+    }
+
     std::fs::read_dir(patch_patch)
         .unwrap()
         .map(|e| e.unwrap())
