@@ -11,7 +11,7 @@ use tempfile::NamedTempFile;
 
 #[derive(clap::Parser)]
 pub struct Args {
-    #[arg(long, default_value = "/usr/share/ilum/patches")]
+    #[arg(long, default_value = "/usr/share/archpatch/patches")]
     patch_path: PathBuf,
 
     #[command(subcommand)]
@@ -25,7 +25,7 @@ pub enum Commands {
         #[arg(long)]
         skip_pacreport: bool,
     },
-    /// Find all modified backup files and produces a patch file for each of them.
+    /// Given a backuped file, produce the diff to apply to the original to get the current file.
     Diff {
         target: PathBuf,
         #[arg(long)]
