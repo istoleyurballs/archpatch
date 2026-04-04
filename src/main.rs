@@ -339,16 +339,13 @@ fn do_apply(args: &Args) {
         let target_content = std::fs::read_to_string(&patch.of).unwrap();
 
         match patch.apply(target_content) {
-            Ok(patched_content) => {
-                match std::fs::write(&patch.of, &patched_content) {
-                    Ok(_) => println!("OK"),
-                    Err(err) => {
-                        println!("ERR ({err})");
-                        errored = true;
-                    }
+            Ok(patched_content) => match std::fs::write(&patch.of, &patched_content) {
+                Ok(_) => println!("OK"),
+                Err(err) => {
+                    println!("ERR ({err})");
+                    errored = true;
                 }
-                println!("{patched_content}");
-            }
+            },
             Err(PatchError::AlreadyApplied) => {
                 println!("OK (already applied)");
             }
